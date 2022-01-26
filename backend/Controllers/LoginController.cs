@@ -1,4 +1,7 @@
 using System.Threading.Tasks;
+using backend.Interfaces;
+using backend.Models;
+using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -9,10 +12,12 @@ namespace backend.Controllers
     [Produces("application/json")]
     public class LoginController : ControllerBase
     {
+        private readonly ILoginService _loginService;
         private readonly ILogger<LoginController> _logger;
 
-        public LoginController(ILogger<LoginController> logger)
+        public LoginController(ILogger<LoginController> logger, ILoginService loginService)
         {
+            _loginService = loginService;
             _logger = logger;
         }
 
@@ -20,7 +25,8 @@ namespace backend.Controllers
         [Route("")]
         public IActionResult CreateAccount()
         {
-            return new OkObjectResult(new { Name = "Nick" });
+            var account = _loginService.CreateAccount();
+            return new OkObjectResult(account);
         }
     }
 }
